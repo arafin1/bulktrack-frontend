@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { useAuth } from "../context/AuthContext"
 import Layout from "../components/layout/Layout"
 import API from "../services/api"
 
@@ -15,6 +16,32 @@ function Badge({ status }) {
     <span className={`text-xs px-2 py-1 rounded-md font-medium ${styles[status] || "bg-gray-100 text-gray-600"}`}>
       {status?.replace("_", " ")}
     </span>
+  )
+}
+function StatusDropdown({ sample, onUpdate, userRole }) {
+  const allowedStatuses = {
+    admin: ["pending", "submitted", "approved", "rejected", "revised", "resubmitted"],
+    merchandiser: ["pending", "submitted", "revised", "resubmitted"],
+    buyer: ["approved", "rejected"],
+    factory: [],
+  }
+
+  const options = allowedStatuses[userRole] || []
+
+  if (options.length === 0) {
+    return <Badge status={sample.status} />
+  }
+
+  return (
+    <select
+      value={sample.status}
+      onChange={(e) => onUpdate(sample.id, e.target.value)}
+      className="text-xs border border-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:border-emerald-400 bg-white"
+    >
+      {options.map((s) => (
+        <option key={s} value={s}>{s}</option>
+      ))}
+    </select>
   )
 }
 
@@ -141,6 +168,7 @@ function CreateSampleModal({ onClose, onCreated }) {
 }
 
 export default function Samples() {
+  const { user } = useAuth()
   const [samples, setSamples] = useState([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState("all")
@@ -166,6 +194,7 @@ export default function Samples() {
   }
 
   const filters = ["all", "pending", "submitted", "approved", "rejected", "revised"]
+
 
   const filtered = filter === "all"
     ? samples
@@ -243,19 +272,11 @@ export default function Samples() {
                   {sample.date_sent}
                 </span>
                 <div className="flex items-center gap-2">
-                  <Badge status={sample.status} />
-                  <select
-                    value={sample.status}
-                    onChange={(e) => updateStatus(sample.id, e.target.value)}
-                    className="text-xs border border-gray-200 rounded-lg px-2 py-1 focus:outline-none focus:border-emerald-400 bg-white"
-                  >
-                    <option value="pending">pending</option>
-                    <option value="submitted">submitted</option>
-                    <option value="approved">approved</option>
-                    <option value="rejected">rejected</option>
-                    <option value="revised">revised</option>
-                    <option value="resubmitted">resubmitted</option>
-                  </select>
+                  <StatusDropdown
+                    sample={sample}
+                    onUpdate={updateStatus}
+                    userRole={user?.role}
+                  />
                 </div>
               </div>
             ))

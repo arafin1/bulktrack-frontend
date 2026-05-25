@@ -177,9 +177,11 @@ export default function Buyers() {
                 className="grid grid-cols-4 gap-4 px-4 py-3 border-t border-gray-50 items-center hover:bg-gray-50 transition-colors"
               >
                 <div className="col-span-2 flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center text-xs font-medium text-emerald-700">
-                    {buyer.name?.slice(0, 2).toUpperCase()}
-                  </div>
+                  <img
+                    src={`https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=40`}
+                    alt={buyer.name}
+                    className="w-10 h-10 rounded-lg object-cover border border-gray-100"
+                  />
                   <p className="text-sm font-medium text-gray-900">
                     {buyer.name}
                   </p>

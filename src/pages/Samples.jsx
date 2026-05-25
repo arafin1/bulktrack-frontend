@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { useAuth } from "../context/AuthContext"
 import Layout from "../components/layout/Layout"
 import API from "../services/api"
+import { styleImages, defaultClothingImage } from "../data/mockImages"
 
 function Badge({ status }) {
   const styles = {
@@ -257,12 +258,19 @@ export default function Samples() {
                 key={sample.id}
                 className="grid grid-cols-5 gap-4 px-4 py-3 border-t border-gray-50 items-center hover:bg-gray-50 transition-colors"
               >
-                <div className="col-span-2">
+                <div className="col-span-2 flex items-center gap-3">
+                  <img
+                    src={sample.image_url || styleImages[sample.style_id] || defaultClothingImage}
+                    alt="sample"
+                    className="w-10 h-10 rounded-lg object-cover border border-gray-100 flex-shrink-0"
+                    onError={(e) => e.target.src = defaultClothingImage}
+                  />
+                 
                   <p className="text-sm font-medium text-gray-900">
-                    {sample.style_id}
+                    {String(sample.id).slice(0, 8)}
                   </p>
                   <p className="text-xs text-gray-400 mt-0.5">
-                    #{String(sample.id).slice(0, 8)}
+                    #{sample.id}
                   </p>
                 </div>
                 <span className="text-sm text-gray-600 capitalize">

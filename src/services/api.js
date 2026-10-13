@@ -2,10 +2,7 @@ import axios from "axios"
 
 
 const API = axios.create({
-
-  baseURL: import.meta.env.REACT_APP_API_URL
-    ? `${import.meta.env.REACT_APP_API_URL}/api/v1` 
-    : "http://3.27.62.216/api/v1"
+  baseURL: "/api/v1"
 });
 
 API.interceptors.request.use((config) => {

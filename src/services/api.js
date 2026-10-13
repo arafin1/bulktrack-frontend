@@ -1,8 +1,12 @@
 import axios from "axios"
 
+
 const API = axios.create({
-  baseURL: "https://bulktrack.up.railway.app/api/v1"
-})
+
+  baseURL: import.meta.env.REACT_APP_API_URL
+    ? `${import.meta.env.REACT_APP_API_URL}/api/v1` 
+    : "http://3.27.62.216/api/v1"
+});
 
 API.interceptors.request.use((config) => {
   const token = localStorage.getItem("token")

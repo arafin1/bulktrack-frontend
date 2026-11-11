@@ -1,16 +1,14 @@
-# React + Vite
+# BulkTrack — B2B Garments Sample & Bulk Production ERP
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+BulkTrack is a full-stack B2B SaaS/ERP application designed for the garments manufacturing industry to track buyer inquiries, sample approvals, bill of materials (BOM), and bulk production orders.
 
-Currently, two official plugins are available:
+## Cloud Architecture (AWS `ap-southeast-2`)
+* **Frontend:** React + Tailwind CSS (Hosted on Vercel with edge proxy rewrites)
+* **Compute:** Ubuntu Linux on AWS EC2 (`t3.micro`) running Nginx Reverse Proxy + Dockerized Ruby on Rails 7 API (with 2GB host swap configured for build stability)
+* **Network Isolation:** Custom AWS VPC (`10.0.0.0/16`) separating public web traffic (`10.0.1.0/24`) from isolated private database subnets (`10.0.2.0/24`, `10.0.3.0/24`)
+* **Database:** Amazon RDS for PostgreSQL deployed in private subnets (`Public Access = No`), locked down via Security Group referencing on port 5432
+* **Document Storage:** Amazon S3 with Block All Public Access enabled, serving buyer tech packs and invoices via dynamic 300-second Presigned URLs
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Core Features
+* **Role-Based Access Control (RBAC):** Custom JWT authentication supporting Admin, Merchandiser, Factory, and Buyer roles.
+* **Sample & Bulk Order Workflows:** Tracks garment quantities across industry-standard units (`pcs`, `yds`, `kg`, `meters`).
